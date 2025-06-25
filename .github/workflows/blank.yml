@@ -14,7 +14,7 @@ jobs:
         with:
           python-version: '3.10'
       - run: pip install requests
-      - run: python rain_notify.py
+      - run: python PANNALYZE/rain_notify.py
         env:
           OWM_API_KEY: ${{ secrets.OWM_API_KEY }}
           LINE_CHANNEL_TOKEN: ${{ secrets.LINE_CHANNEL_TOKEN }}
