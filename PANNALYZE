@@ -1,0 +1,37 @@
+import os
+import requests
+
+API_KEY = os.getenv("9e533c136dae780294122ad74e914f24")
+CHANNEL_TOKEN = os.getenv("dgAGkAsN0QNGcRqD9itGeIaMgwSA2CDyV1j4V7qFl4jWnIoiRe4rLIV0CcjblQcxW0Hhbg9uGvPcm2abKNkfy++TN72x7413gMTRl2N3kuDUlP+Smry0AoQEjTCTNCkBtgNNcXJv+h+yM7FOtsdgPgdB04t89/1O/w1cDnyilFU=")
+USER_ID = os.getenv("hayato-sdw")
+
+def get_forecast():
+    lat, lon = 35.6595, 139.7005  # 渋谷
+    url = f"https://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid={API_KEY}&units=metric"
+    res = requests.get(url)
+    return res.json()
+
+def send_line_message(message):
+    headers = {
+        "Authorization": f"Bearer {CHANNEL_TOKEN}",
+        "Content-Type": "application/json"
+    }
+    data = {
+        "to": USER_ID,
+        "messages": [{"type": "text", "text": message}]
+    }
+    res = requests.post("https://api.line.me/v2/bot/message/push", headers=headers, json=data)
+    print(res.status_code, res.text)
+
+def main():
+    forecast = get_forecast()
+    for entry in forecast["list"]:
+        rain = entry.get("rain", {}).get("3h", 0)
+        time = entry["dt_txt"]
+        if rain >= 5:  # 閾値：5mm以上
+            msg = f"【渋谷の雨予報】{time} に {rain}mm の予報です☔"
+            send_line_message(msg)
+            break
+
+if __name__ == "__main__":
+    main()
