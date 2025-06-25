@@ -1,0 +1,21 @@
+name: Rain Check
+
+on:
+  schedule:
+    - cron: '0 13 * * *'  # JST 22:00（UTC時間で13:00）
+  workflow_dispatch:
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - run: pip install requests
+      - run: python rain_notify.py
+        env:
+          OWM_API_KEY: ${{ secrets.OWM_API_KEY }}
+          LINE_CHANNEL_TOKEN: ${{ secrets.LINE_CHANNEL_TOKEN }}
+          LINE_USER_ID: ${{ secrets.LINE_USER_ID }}
