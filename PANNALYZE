@@ -26,7 +26,7 @@ def send_line_message(message):
 def main():
     forecast = get_forecast()
     for entry in forecast["list"]:
-        rain = entry.get("rain", {}).get("3h", 0)
+        rain = entry.get("rain", {}).get("1h", 0)
         time = entry["dt_txt"]
         if rain >= 5:  # 閾値：5mm以上
             msg = f"【渋谷の雨予報】{time} に {rain}mm の予報です☔"
