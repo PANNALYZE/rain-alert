@@ -1,9 +1,9 @@
 import os
 import requests
 
-API_KEY = os.getenv("9e533c136dae780294122ad74e914f24")
-CHANNEL_TOKEN = os.getenv("dgAGkAsN0QNGcRqD9itGeIaMgwSA2CDyV1j4V7qFl4jWnIoiRe4rLIV0CcjblQcxW0Hhbg9uGvPcm2abKNkfy++TN72x7413gMTRl2N3kuDUlP+Smry0AoQEjTCTNCkBtgNNcXJv+h+yM7FOtsdgPgdB04t89/1O/w1cDnyilFU=")
-USER_ID = os.getenv("hayato-sdw")
+API_KEY = os.getenv("OWM_API_KEY")
+CHANNEL_TOKEN = os.getenv("LINE_CHANNEL_TOKEN")
+USER_ID = os.getenv("LINE_USER_ID")
 
 def get_forecast():
     lat, lon = 35.6595, 139.7005  # 渋谷
@@ -26,7 +26,7 @@ def send_line_message(message):
 def main():
     forecast = get_forecast()
     for entry in forecast["list"]:
-        rain = entry.get("rain", {}).get("1h", 0)
+        rain = entry.get("rain", {}).get("3h", 0)
         time = entry["dt_txt"]
         if rain >= 5:  # 閾値：5mm以上
             msg = f"【渋谷の雨予報】{time} に {rain}mm の予報です☔"
