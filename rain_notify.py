@@ -1,6 +1,5 @@
 import os
 import requests
-from datetime import datetime, timedelta
 
 API_KEY = os.getenv("OWM_API_KEY")
 CHANNEL_TOKEN = os.getenv("LINE_CHANNEL_TOKEN")
@@ -23,21 +22,5 @@ def send_line_message(message):
     }
     requests.post("https://api.line.me/v2/bot/message/push", headers=headers, json=data)
 
-forecast = get_forecast()
-
-# 明日の日付（日本時間で計算）
-tomorrow = (datetime.utcnow() + timedelta(hours=9) + timedelta(days=1)).date()
-
-alerts = []
-for entry in forecast["list"]:
-    dt = datetime.utcfromtimestamp(entry["dt"]) + timedelta(hours=9)  # 日本時間
-    if dt.date() == tomorrow:
-        rain = entry.get("rain", {}).get("3h", 0)  # 3時間降水量
-        rain_per_hour = rain / 3
-        if rain_per_hour > 5:
-            time_str = dt.strftime("%Y-%m-%d %H:%M")
-            alerts.append(f"{time_str} に強い雨の予報（{rain_per_hour:.1f}mm/h）")
-
-if alerts:
-    message = "【明日の雨予報（渋谷）】\n" + "\n".join(alerts)
-    send_line_message(message)
+# ★テスト用：通知を強制的に送信
+send_line_message("【テスト通知】このメッセージが届けば、LINEの設定とGitHub Actionsは正常です ✅")
