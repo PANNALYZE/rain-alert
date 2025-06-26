@@ -36,7 +36,7 @@ for entry in forecast["list"]:
     if dt.date() == tomorrow:
         rain = entry.get("rain", {}).get("3h", 0)  # 3時間あたりの降水量
         rain_per_hour = rain / 3  # 1時間換算
-        if rain_per_hour > 3:
+        if rain_per_hour > 5:
             time_str = dt.strftime("%Y-%m-%d %H:%M")
             alerts.append(f"{time_str} に強い雨の予報（{rain_per_hour:.1f}mm/h）")
 
